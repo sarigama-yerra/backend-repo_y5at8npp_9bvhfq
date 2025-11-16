@@ -1,11 +1,10 @@
 INFO:     Will watch for changes in these directories: ['/home/workspace']
 INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
-INFO:     Started reloader process [150] using StatReload
-INFO:     Started server process [152]
+INFO:     Started reloader process [235] using StatReload
+INFO:     Started server process [237]
 INFO:     Waiting for application startup.
 INFO:     Application startup complete.
-INFO:     172.20.0.1:38654 - "HEAD / HTTP/1.1" 405 Method Not Allowed
-INFO:     172.20.0.1:38658 - "GET /products?sort=trend HTTP/1.1" 500 Internal Server Error
+INFO:     172.20.0.1:35870 - "GET /products?sort=trend HTTP/1.1" 500 Internal Server Error
 ERROR:    Exception in ASGI application
 Traceback (most recent call last):
   File "/usr/local/lib/python3.13/site-packages/uvicorn/protocols/http/h11_impl.py", line 408, in run_asgi
@@ -78,7 +77,7 @@ Traceback (most recent call last):
     ...<3 lines>...
     )
 NotImplementedError: Database objects do not implement truth value testing or bool(). Please compare with None instead: database is not None
-INFO:     172.20.0.1:38672 - "GET /products?sort=trend HTTP/1.1" 500 Internal Server Error
+INFO:     172.20.0.1:35876 - "GET /products?sort=trend HTTP/1.1" 500 Internal Server Error
 ERROR:    Exception in ASGI application
 Traceback (most recent call last):
   File "/usr/local/lib/python3.13/site-packages/uvicorn/protocols/http/h11_impl.py", line 408, in run_asgi
@@ -151,7 +150,8 @@ Traceback (most recent call last):
     ...<3 lines>...
     )
 NotImplementedError: Database objects do not implement truth value testing or bool(). Please compare with None instead: database is not None
-INFO:     172.20.0.1:36674 - "GET /products?sort=trend HTTP/1.1" 500 Internal Server Error
+INFO:     172.20.0.1:35888 - "HEAD / HTTP/1.1" 405 Method Not Allowed
+INFO:     172.20.0.1:45364 - "GET /products?sort=trend HTTP/1.1" 500 Internal Server Error
 ERROR:    Exception in ASGI application
 Traceback (most recent call last):
   File "/usr/local/lib/python3.13/site-packages/uvicorn/protocols/http/h11_impl.py", line 408, in run_asgi
@@ -224,7 +224,7 @@ Traceback (most recent call last):
     ...<3 lines>...
     )
 NotImplementedError: Database objects do not implement truth value testing or bool(). Please compare with None instead: database is not None
-INFO:     172.20.0.1:36684 - "GET /products?sort=trend HTTP/1.1" 500 Internal Server Error
+INFO:     172.20.0.1:45368 - "GET /products?sort=trend HTTP/1.1" 500 Internal Server Error
 ERROR:    Exception in ASGI application
 Traceback (most recent call last):
   File "/usr/local/lib/python3.13/site-packages/uvicorn/protocols/http/h11_impl.py", line 408, in run_asgi

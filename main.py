@@ -8,7 +8,7 @@ from datetime import datetime, timedelta, timezone
 
 from database import db, create_document, get_documents
 
-app = FastAPI(title="Headless Commerce API", version="1.0.0")
+app = FastAPI(title="Headless Commerce API", version="1.1.0")
 
 app.add_middleware(
     CORSMiddleware,
@@ -328,6 +328,66 @@ def payment_webhook(provider: str, payload: dict):
     # Placeholder: log payload
     _id = create_document("webhook_log", {"provider": provider, "payload": payload})
     return {"logged": True, "id": _id}
+
+# ---------------------- Importers (Scaffold) ----------------------
+
+SUPPORTED_IMPORT_PROVIDERS = [
+    "shopify",       # Shopify Admin API (requires credentials)
+    "aliexpress",    # Requires RapidAPI/official API key
+    "cjdropshipping",# Requires API key
+    "printful",      # Example
+    "demo"           # Uses local curated seed for demonstration
+]
+
+class ImportRequest(BaseModel):
+    provider: str
+    categories: Optional[List[str]] = None
+    limit: int = 20
+
+@app.get("/import/providers")
+def list_import_providers():
+    return {"providers": SUPPORTED_IMPORT_PROVIDERS}
+
+@app.post("/import/run")
+def run_import(req: ImportRequest):
+    provider = req.provider.lower()
+    if provider not in SUPPORTED_IMPORT_PROVIDERS:
+        raise HTTPException(400, "Unsupported provider")
+
+    imported: List[str] = []
+
+    if provider == "demo":
+        # Use local curated list (ensures ≥3x margins, high trend score)
+        cats = set(req.categories or [])
+        for p in seed_products:
+            if cats and p.category not in cats:
+                continue
+            existing = db["product"].find_one({"title": p.title}) if db else None
+            if existing:
+                continue
+            _id = create_document("product", p.model_dump())
+            imported.append(str(_id))
+        return {"imported": imported, "count": len(imported)}
+
+    # For real providers, we require API credentials configured via environment
+    # variables. The actual fetch-and-map logic can be enabled when keys are present.
+    if provider == "shopify":
+        if not (os.getenv("SHOPIFY_STORE") and os.getenv("SHOPIFY_ADMIN_TOKEN")):
+            raise HTTPException(400, "Missing SHOPIFY_STORE/SHOPIFY_ADMIN_TOKEN envs")
+        # Placeholder: implement Shopify Admin API products fetch
+        raise HTTPException(501, "Shopify import not yet enabled in this demo environment")
+
+    if provider == "aliexpress":
+        if not os.getenv("ALIEXPRESS_API_KEY"):
+            raise HTTPException(400, "Missing ALIEXPRESS_API_KEY env")
+        raise HTTPException(501, "AliExpress import not yet enabled in this demo environment")
+
+    if provider == "cjdropshipping":
+        if not (os.getenv("CJ_APP_ID") and os.getenv("CJ_APP_SECRET")):
+            raise HTTPException(400, "Missing CJ_APP_ID/CJ_APP_SECRET envs")
+        raise HTTPException(501, "CJ import not yet enabled in this demo environment")
+
+    return {"imported": imported, "count": len(imported)}
 
 if __name__ == "__main__":
     import uvicorn
